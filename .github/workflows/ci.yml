@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI with Security Scan
 
 on: [push]
 
@@ -11,8 +11,12 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18' # Sesuaikan dengan versi Node.js yang Anda gunakan
+        node-version: '18'
     - name: Install Dependencies
       run: npm install
-    - name: Run Tests
+    - name: Run Unit Tests
       run: npm test
+    - name: Run NPM Audit (Dependency Scan)
+      run: npm audit --audit-level=high # Memindai kerentanan dependensi
+    - name: GitLeaks Scan (Secrets Detection)
+      uses: zricethezav/gitleaks-action@v1.6.0 # Memindai kebocoran rahasia
